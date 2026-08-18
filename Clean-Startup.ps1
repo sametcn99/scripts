@@ -158,10 +158,10 @@ function Get-RegistryValueNames {
 
         return @(
             $item.PSObject.Properties |
-                Where-Object {
-                    $_.Name -notin $IgnoredRegistryProperties
-                } |
-                Select-Object -ExpandProperty Name
+            Where-Object {
+                $_.Name -notin $IgnoredRegistryProperties
+            } |
+            Select-Object -ExpandProperty Name
         )
     }
     catch {
@@ -285,7 +285,7 @@ function Get-ShortcutTarget {
                 'Broken'
             }
 
-            Path = $target
+            Path   = $target
         }
     }
     catch {
@@ -307,7 +307,7 @@ function Backup-StartupRegistry {
         -ItemType Directory `
         -Path $backupDirectory `
         -Force |
-        Out-Null
+    Out-Null
 
     $registryKeys = @(
         'HKCU\Software\Microsoft\Windows\CurrentVersion\Run',
@@ -420,7 +420,7 @@ foreach ($startupFolder in $StartupFolders) {
                     'Broken'
                 }
 
-                Path = $item.FullName
+                Path   = $item.FullName
             }
         }
 
@@ -475,8 +475,8 @@ foreach ($location in $StartupApprovedLocations) {
                     -LiteralPath $location.SourcePath `
                     -Force `
                     -ErrorAction SilentlyContinue |
-                    Where-Object { -not $_.PSIsContainer } |
-                    Select-Object -ExpandProperty Name
+                Where-Object { -not $_.PSIsContainer } |
+                Select-Object -ExpandProperty Name
             )
         }
         else {
@@ -526,8 +526,8 @@ if ($UnverifiedEntries.Count -gt 0) {
     Write-Host 'They will not be removed.' -ForegroundColor DarkGray
 
     $UnverifiedEntries |
-        Select-Object Category, Name, Scope, Command |
-        Format-Table -AutoSize -Wrap
+    Select-Object Category, Name, Scope, Command |
+    Format-Table -AutoSize -Wrap
 }
 
 if ($BrokenEntries.Count -eq 0) {
@@ -541,8 +541,8 @@ if ($BrokenEntries.Count -eq 0) {
 Write-Section 'Broken Startup Entries'
 
 $BrokenEntries |
-    Select-Object Category, Name, Scope, Target, Location |
-    Format-Table -AutoSize -Wrap
+Select-Object Category, Name, Scope, Target, Location |
+Format-Table -AutoSize -Wrap
 
 # ---------------------------------------------------------------------------
 # Request confirmation
@@ -552,7 +552,7 @@ Write-Host ''
 Write-Host (
     "Found {0} broken or orphaned startup entr{1}." -f `
         $BrokenEntries.Count,
-        $(if ($BrokenEntries.Count -eq 1) { 'y' } else { 'ies' })
+    $(if ($BrokenEntries.Count -eq 1) { 'y' } else { 'ies' })
 ) -ForegroundColor Yellow
 
 $confirmation = Read-Host 'Remove these broken startup entries? [y/N]'
@@ -622,8 +622,8 @@ foreach ($entry in $BrokenEntries) {
         Write-Warning (
             "Failed to remove '{0}' from '{1}': {2}" -f `
                 $entry.Name,
-                $entry.Location,
-                $_.Exception.Message
+            $entry.Location,
+            $_.Exception.Message
         )
     }
 }
